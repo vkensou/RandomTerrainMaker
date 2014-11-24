@@ -91,13 +91,13 @@
     <string>运行</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>530</x>
      <y>100</y>
-     <width>85</width>
-     <height>40</height>
+     <width>91</width>
+     <height>62</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -112,6 +112,13 @@
      <widget class="QRadioButton" name="rdb_plate">
       <property name="text">
        <string>板块漂移法</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="rdb_particle">
+      <property name="text">
+       <string>粒子沉积法</string>
       </property>
      </widget>
     </item>

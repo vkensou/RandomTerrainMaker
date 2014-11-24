@@ -23,9 +23,11 @@ void TerrainModeling::erosion()
 
     for(unsigned int j = 0;j<mterrain.getHeight();j++)
     {
-        for(unsigned int i = 0;i<mterrain.getWidth();i++)
+        temp[j * mterrain.getWidth() + 0] = mterrain.at(0, j);
+        temp[j * mterrain.getWidth() + mterrain.getWidth() - 1] = mterrain.at(mterrain.getWidth() - 1, j);
+        for(unsigned int i = 1;i<mterrain.getWidth() - 1;i++)
         {
-            temp[j * mterrain.getWidth() + i] = (data[ptoi(i-1,j,mterrain.getWidth(),mterrain.getHeight())] + 1 * data[j * mterrain.getWidth() + i] + data[ptoi(i+1, j,mterrain.getWidth(),mterrain.getHeight())]) / 3;
+            temp[j * mterrain.getWidth() + i] = (mterrain.at(i - 1, j) + mterrain.at(i, j) + mterrain.at(i + 1, j)) / 3;
         }
     }
 

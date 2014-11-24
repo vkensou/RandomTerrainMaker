@@ -17,23 +17,28 @@ SOURCES += main.cpp\
     terrain.cpp \
     faultformation.cpp \
     platedrift.cpp \
-    terrainmodeling.cpp
+    terrainmodeling.cpp \
+    particledeposition.cpp \
+    fallpoints.cpp
 
 HEADERS  += makerdialog.h \
     terrain.h \
     faultformation.h \
     platedrift.h \
     terrainmodeling.h \
-    terrainutil.h
+    terrainutil.h \
+    particledeposition.h \
+    fallpoints.h \
+    point.h
 
 FORMS    += makerdialog.ui
 
 CONFIG += c++11
 
-win32: LIBS += -L$$PWD/../../../libraries/log4cpp/qtcreator/build-log4cpp-Desktop_Qt_5_3_MinGW_32bit-Release/release/ -llog4cpp
+win32: LIBS += -L$$PWD/../../libraries/log4cpp/qtcreator/build-log4cpp-Desktop_Qt_5_3_MinGW_32bit-Release/release/ -llog4cpp
 
-INCLUDEPATH += $$PWD/../../../libraries/log4cpp/include
-DEPENDPATH += $$PWD/../../../libraries/log4cpp/include
+INCLUDEPATH += $$PWD/../../libraries/log4cpp/include
+DEPENDPATH += $$PWD/../../libraries/log4cpp/include
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../../libraries/log4cpp/qtcreator/build-log4cpp-Desktop_Qt_5_3_MinGW_32bit-Release/release/log4cpp.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/../../../libraries/log4cpp/qtcreator/build-log4cpp-Desktop_Qt_5_3_MinGW_32bit-Release/release/liblog4cpp.a
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../libraries/log4cpp/qtcreator/build-log4cpp-Desktop_Qt_5_3_MinGW_32bit-Release/release/log4cpp.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/../../libraries/log4cpp/qtcreator/build-log4cpp-Desktop_Qt_5_3_MinGW_32bit-Release/release/liblog4cpp.a

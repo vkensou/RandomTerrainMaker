@@ -6,6 +6,7 @@
 #include <QProcess>
 #include "faultformation.h"
 #include "platedrift.h"
+#include "particledeposition.h"
 
 MakerDialog::MakerDialog(QWidget *parent) :
     QDialog(parent),
@@ -111,4 +112,9 @@ void MakerDialog::on_rdb_fault_clicked()
 void MakerDialog::on_rdb_plate_clicked()
 {
     setModeling(new PlateDrift(terrain));
+}
+
+void MakerDialog::on_rdb_particle_clicked()
+{
+    setModeling(new ParticleDeposition(terrain));
 }

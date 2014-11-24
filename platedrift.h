@@ -23,19 +23,9 @@ private:
             int id[8];
         }x[2];
         int ys{0};
-        bool isd(int i)
-        {
-            int n = 0;
-            for(int j = 0;j<8;j++)
-            {
-                if(x[i].id[j]!=false)
-                    n++;
-            }
-            if(n>=2)
-                return true;
-            else
-                return false;
-        }
+        bool isd(int i);
+        void cl(int i);
+        int fn(int i);
     };
     Cell *cells{nullptr};
     int index{0}, index2{1};

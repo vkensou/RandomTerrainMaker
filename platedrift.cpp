@@ -31,34 +31,42 @@ void PlateDrift::start()
                 cells[i].x[1].id[4] = cells[i].x[1].id[5] = cells[i].x[1].id[6] = cells[i].x[1].id[7] = 0;
     }
 
-//    for(unsigned int j = 0;j < mterrain.getHeight();j++)
+        for(unsigned int j = 0;j < mterrain.getHeight();j++)
+        {
+            for(unsigned int i = 0;i < mterrain.getWidth()/2;i++)
+            {
+                cells[j*mterrain.getWidth()+i].ys = 4;
+            }
+            for(unsigned int i = mterrain.getWidth()/2;i < mterrain.getWidth();i++)
+            {
+                cells[j*mterrain.getWidth()+i].ys = 0;
+            }
+        }
+
+//    for(unsigned int j = 0;j < mterrain.getHeight()/2;j++)
 //    {
 //        for(unsigned int i = 0;i < mterrain.getWidth()/2;i++)
 //        {
-//            cells[j*mterrain.getWidth()+i].ys = 4;
+//            cells[j*mterrain.getWidth()+i].ys = random(0,7);
 //        }
 //        for(unsigned int i = mterrain.getWidth()/2;i < mterrain.getWidth();i++)
 //        {
-//            cells[j*mterrain.getWidth()+i].ys = 0;
+//            cells[j*mterrain.getWidth()+i].ys = random(0,7);
+//        }
+//    }
+//    for(unsigned int j = mterrain.getHeight()/2;j < mterrain.getHeight();j++)
+//    {
+//        for(unsigned int i = 0;i < mterrain.getWidth()/2;i++)
+//        {
+//            cells[j*mterrain.getWidth()+i].ys = random(0,7);
+//        }
+//        for(unsigned int i = mterrain.getWidth()/2;i < mterrain.getWidth();i++)
+//        {
+//            cells[j*mterrain.getWidth()+i].ys = random(0,7);
 //        }
 //    }
 
-    for(unsigned int j = 0;j < mterrain.getHeight()/2;j++)
-    {
-        for(unsigned int i = 0;i < mterrain.getWidth();i++)
-        {
-            cells[j*mterrain.getWidth()+i].ys = 2;
-        }
-    }
-    for(unsigned int j = mterrain.getHeight()/2;j < mterrain.getHeight();j++)
-    {
-        for(unsigned int i = 0;i < mterrain.getWidth();i++)
-        {
-            cells[j*mterrain.getWidth()+i].ys = 6;
-        }
-    }
-
-//    debugcells(index);
+    //    debugcells(index);
 
 }
 
@@ -68,11 +76,12 @@ void PlateDrift::step()
 
     logg.debug("step %d", mstepindex);
     logg.debug("before:");
-//    debugcells(index);
+    //    debugcells(index);
     for(unsigned int j = 0;j < mterrain.getHeight();j++)
     {
         for(unsigned int i = 0;i < mterrain.getWidth();i++)
         {
+//            cells[j*mterrain.getWidth()+i].cl(index);
             if(j>0)
             {
                 if(i > 0)
@@ -154,7 +163,7 @@ void PlateDrift::step()
     }
 
     logg.debug("after:");
-//    debugcells(index2);
+    //    debugcells(index2);
 
     int temp = index;
     index = index2;
@@ -165,7 +174,7 @@ void PlateDrift::step()
         if(cells[i].isd(index))addNum(mterrain.getData()[i], random(0.8, 1.0));
     }
 
-//    debugterrain();
+    //    debugterrain();
 }
 
 void PlateDrift::generate()
@@ -217,8 +226,125 @@ void PlateDrift::debugterrain()
         str.str("");
         for(unsigned int i = 0;i < mterrain.getWidth();i++)
         {
-             str<<mterrain.getData()[i]<<",";
+            str<<mterrain.getData()[i]<<",";
         }
         logg.debug(str.str());
     }
+}
+
+
+bool PlateDrift::Cell::isd(int i)
+{
+    int n = 0;
+    int n1 = -1;
+    int j;
+    for(j = 0;j<8;j++)
+    {
+        if(x[i].id[j]!=false)
+        {
+            n1 = j;
+            n++;
+            break;
+        }
+    }
+    if(n == 0)
+    {
+        return false;
+    }
+    int n2 = -1;
+    for(++j;j<8;j++)
+    {
+        if(x[i].id[j]!=false)
+        {
+            n2 = j;
+            n++;
+            break;
+        }
+    }
+    if(n<2)
+    {
+        return false;
+    }
+//    return true;
+    if(n2 - n1==4)
+    {
+        return true;
+    }
+    int n3 = -1;
+    for(++j;j<8;j++)
+    {
+        if(x[i].id[j]!=false)
+        {
+            n3 = j;
+            n++;
+            break;
+        }
+    }
+    if(n<3)
+    {
+        return false;
+    }
+    if(n2 - n1<4)
+    {
+        if(n3-n1>=4)
+            return true;
+    }
+    else
+    {
+        if(n3>n1 && n3<n2)
+            return true;
+    }
+    int n4 = -1;
+    for(++j;j<8;j++)
+    {
+        if(x[i].id[j]!=false)
+        {
+            n4 = j;
+            n++;
+            break;
+        }
+    }
+    if(n<3)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void PlateDrift::Cell::cl(int i)
+{
+    int ne[8] = {0,0,0,0,0,0,0,0};
+    if(fn(i)<2)return ;
+    for(int n = 0;n<8;n++)
+    {
+        if(x[i].id[n]!=0)
+        {
+            if(random()<0.5)
+            {
+//                ne[n] = x[i].id[n];
+                ne[random(0,7)] = x[i].id[n];
+            }
+            else
+            {
+                ne[n] = x[i].id[n];
+            }
+        }
+    }
+    memcpy(x[i].id, ne, 8 * sizeof(int));
+}
+
+int PlateDrift::Cell::fn(int i)
+{
+    int n = 0;
+    for(int j = 0;j<8;j++)
+    {
+        if(x[i].id[j]!=0)
+        {
+            n++;
+        }
+    }
+    return n;
 }

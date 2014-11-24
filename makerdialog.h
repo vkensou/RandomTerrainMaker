@@ -36,6 +36,7 @@ private slots:
 
     void on_rdb_fault_clicked();
     void on_rdb_plate_clicked();
+    void on_rdb_particle_clicked();
 };
 
 #endif // MAKERDIALOG_H
