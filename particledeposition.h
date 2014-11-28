@@ -18,8 +18,9 @@ public:
 
 private:
     FallPoints fallpoints;
-    void querylowerpoints(const IntPoint &point0, unsigned int radius, std::vector<IntPoint> &points);
+    void querylowerpoints(const IntPoint &point0, int radius, std::vector<IntPoint> &points);
     void addlowerpoint(const IntPoint &point, double h0, std::vector<IntPoint> &points);
+    void placeOneParticle(const UIntPoint &position);
 };
 
 #endif // PARTICLEDEPOSITION_H
