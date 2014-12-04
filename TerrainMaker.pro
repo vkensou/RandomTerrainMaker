@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     platedrift.cpp \
     terrainmodeling.cpp \
     particledeposition.cpp \
-    fallpoints.cpp
+    fallpoints.cpp \
+    pd_sand.cpp \
+    pd_dla.cpp
 
 HEADERS  += makerdialog.h \
     terrain.h \
@@ -29,7 +31,10 @@ HEADERS  += makerdialog.h \
     terrainutil.h \
     particledeposition.h \
     fallpoints.h \
-    point.h
+    pd_sand.h \
+    pd_dla.h \
+    elementspace2d.h \
+    vector2.h
 
 FORMS    += makerdialog.ui
 

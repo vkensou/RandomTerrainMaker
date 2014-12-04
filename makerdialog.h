@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::MakerDialog *ui;
-    unsigned int w{513}, h{513};
+    unsigned int w{257}, h{257};
     Terrain terrain{w, h};
     TerrainModeling *modeling{nullptr};
     QImage greyimage;
@@ -37,6 +37,7 @@ private slots:
     void on_rdb_fault_clicked();
     void on_rdb_plate_clicked();
     void on_rdb_particle_clicked();
+    void on_rdb_particle_sand_clicked();
 };
 
 #endif // MAKERDIALOG_H

@@ -19,7 +19,7 @@ PlateDrift::~PlateDrift()
 void PlateDrift::start()
 {
     mstepindex = 0;
-    mterrain.reset();
+    mterrain.clearup();
     clear();
     cells = new Cell[mterrain.getWidth() * mterrain.getHeight()];
 

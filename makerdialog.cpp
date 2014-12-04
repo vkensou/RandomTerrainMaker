@@ -7,6 +7,8 @@
 #include "faultformation.h"
 #include "platedrift.h"
 #include "particledeposition.h"
+#include "pd_dla.h"
+#include "pd_sand.h"
 
 MakerDialog::MakerDialog(QWidget *parent) :
     QDialog(parent),
@@ -34,7 +36,7 @@ MakerDialog::~MakerDialog()
 
 void MakerDialog::btn_init_clicked()
 {
-    terrain.reset();
+    terrain.clearup();
     updateimage();
 }
 
@@ -92,7 +94,7 @@ void MakerDialog::updateimage()
 void MakerDialog::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.drawImage(200, 200, greyimage);
+    painter.drawImage(0, 0, greyimage);
 }
 
 void MakerDialog::setModeling(TerrainModeling *newmodeling)
@@ -117,4 +119,9 @@ void MakerDialog::on_rdb_plate_clicked()
 void MakerDialog::on_rdb_particle_clicked()
 {
     setModeling(new ParticleDeposition(terrain));
+}
+
+void MakerDialog::on_rdb_particle_sand_clicked()
+{
+    setModeling(new PD_Sand(terrain));
 }

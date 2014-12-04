@@ -40,7 +40,7 @@ inline double random(double a, double b)
 //return [a,b]
 inline int random(int a, int b)
 {
-    return qrand() / (RAND_MAX + 1.0) * (b - a + 1) + a;
+    return (int)(qrand() / (RAND_MAX + 1.0) * (b - a + 1)) + a;
 }
 
 //return [0,n]

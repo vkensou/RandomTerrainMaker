@@ -1,7 +1,7 @@
 #ifndef FALLPOINTS_H
 #define FALLPOINTS_H
 #include <vector>
-#include "point.h"
+#include "vector2.h"
 
 class FallPoints
 {

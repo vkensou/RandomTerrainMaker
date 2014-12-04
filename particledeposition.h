@@ -2,10 +2,10 @@
 #define PARTICLEDEPOSITION_H
 
 #include "terrainmodeling.h"
-#include "fallpoints.h"
 
 #include <vector>
-#include "point.h"
+#include "vector2.h"
+#include <functional>
 
 class ParticleDeposition : public TerrainModeling
 {
@@ -16,11 +16,13 @@ public:
     void generate() override;
     bool isfinished() override;
 
-private:
-    FallPoints fallpoints;
-    void querylowerpoints(const IntPoint &point0, int radius, std::vector<IntPoint> &points);
-    void addlowerpoint(const IntPoint &point, double h0, std::vector<IntPoint> &points);
+protected:
     void placeOneParticle(const UIntPoint &position);
+
+    void queryNearbyPointsIf(const IntPoint &point0, int radius, std::vector<IntPoint> &points,
+                             std::function<void(const IntPoint &point, std::vector<IntPoint> &points)> func);
+    void querylowerpoints(const IntPoint &point0, int radius, std::vector<IntPoint> &points);
+    void queryhigherpoints(const IntPoint &point0, int radius, std::vector<IntPoint> &points);
 };
 
 #endif // PARTICLEDEPOSITION_H

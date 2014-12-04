@@ -12,7 +12,7 @@ void FaultFormation::start()
     mstepindex = 0;
     mdelta0 = 5;
     mdeltan = 0;
-    mterrain.reset();
+    mterrain.clearup();
 }
 
 int changesign(int num)
