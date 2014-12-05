@@ -18,11 +18,16 @@ private:
     void sandflow();
     bool sandflowstep();
     void unlockall();
-
+    bool pointInWindwardSlope(const UIntPoint &point);
+    bool pointInLeewardSlope(const UIntPoint &point);
+    void sandblowOutofTerrain(const IntPoint &point);
+    void putsands();
 private:
     ElementSpace2D<bool> locks;
     Vector2<double> mwinddirect;
     int mwindpower;
+    int mneedput;
+
 };
 
 #endif // PD_SAND_H

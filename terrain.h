@@ -12,6 +12,8 @@ public:
     Terrain(unsigned int width, unsigned int height);
 
     void reset(unsigned int width, unsigned int height) override;
+
+    int getPointGradient(const UIntPoint &point, const Vector2<double> &direct);
 };
 
 #endif // TERRAIN_H

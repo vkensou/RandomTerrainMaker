@@ -27,8 +27,10 @@ void PD_Sand::start()
 void PD_Sand::step()
 {
     mstepindex++;
+    mneedput = 0;
     blowsand();
     sandflow();
+    putsands();
 }
 
 void PD_Sand::blowsand()
@@ -41,26 +43,29 @@ void PD_Sand::blowsand()
 
 void PD_Sand::blowsandstep()
 {
-    IntPoint p0(random(0, mterrain.getWidth() - 2), random(0, mterrain.getHeight() - 1));
-    IntPoint p1(p0.x + 1,p0.y);
-    if(mterrain.at(p0) > mterrain.at(p1))
+    UIntPoint p0(random(0, mterrain.getWidth() - 1), random(0, mterrain.getHeight() - 1));
+
+    if(pointInLeewardSlope(p0))
         return;
+
     double h1 = mterrain.at(p0);
     mterrain.at(p0)--;
 
-    int dt = mwindpower;
-    p0.x += dt;
-    if(!mterrain.pointInSpace(p0))
+    IntPoint p1 = {p0.x + mwinddirect.x * mwindpower, p0.y + mwinddirect.y * mwindpower};
+
+    if(!mterrain.pointInSpace(p1))
     {
+        sandblowOutofTerrain(p1);
         return;
     }
 
-    double h2 = mterrain.at(p0);
+    double h2 = mterrain.at(p1);
     if(h2 < h1)
     {
-        p0.x -= mwindpower * 0.5;
+        p1.x -= mwinddirect.x * mwindpower * 0.5;
+        p1.y -= mwinddirect.y * mwindpower * 0.5;
     }
-    placeOneParticle({p0.x, p0.y});
+    placeOneParticle({p1.x, p1.y});
 }
 
 void PD_Sand::sandflow()
@@ -100,4 +105,24 @@ bool PD_Sand::sandflowstep()
 void PD_Sand::unlockall()
 {
     locks.fill(false);
+}
+
+bool PD_Sand::pointInWindwardSlope(const UIntPoint &point)
+{
+    return mterrain.getPointGradient(point, mwinddirect) > 0;
+}
+
+bool PD_Sand::pointInLeewardSlope(const UIntPoint &point)
+{
+    return mterrain.getPointGradient(point, mwinddirect) < 0;
+}
+
+void PD_Sand::sandblowOutofTerrain(const IntPoint &point)
+{
+    mneedput++;
+}
+
+void PD_Sand::putsands()
+{
+    for()
 }

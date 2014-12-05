@@ -17,6 +17,11 @@ struct Vector2
     double distanceTo(const Vector2<T> &point) const;
 
     void normalize();
+
+    Vector2<T> operator *(double v)
+    {
+        return {x * v, y * v};
+    }
 };
 
 template<typename T>

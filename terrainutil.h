@@ -64,4 +64,20 @@ inline void addNum(T &n, T num)
     setNum(n, n+num);
 }
 
+inline int roundnum(int a, int w)
+{
+    a %= w;
+    if(a<0)a+=w;
+    return a;
+}
+
+inline int clipnum(int a, int w)
+{
+    int nr = (w - 1) * 2;
+    int b = roundnum(a, nr);
+    if(b >= w)
+        return nr - b;
+    else
+        return b;
+}
 #endif // TERRAINUTIL_H
