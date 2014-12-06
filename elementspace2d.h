@@ -131,7 +131,7 @@ void ElementSpace2D<ElementType>::for_each(std::function<void (unsigned int, uns
 template <typename ElementType>
 void ElementSpace2D<ElementType>::fill(ElementType value)
 {
-    auto func = [value](unsigned int, ElementType &v)
+	std::function<void(unsigned int, ElementType &)> func = [value](unsigned int, ElementType &v)
     {
         v = value;
     };

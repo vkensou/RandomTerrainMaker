@@ -1,5 +1,6 @@
 #include "pd_sand.h"
 #include "terrainutil.h"
+#include <assert.h>
 
 PD_Sand::PD_Sand(Terrain &terrain)
     :ParticleDeposition(terrain)
@@ -11,17 +12,22 @@ void PD_Sand::start()
 {
     mstepindex = 0;
 
-    mterrain.for_each([](unsigned int, TerrainValue& v)
+    std::function<void(unsigned int i, TerrainValue &value)> func = [](unsigned int, TerrainValue& v)
     {
         v = 50 + random(0, 1);
-    });
+    };
 
-    mwinddirect = {1, 0};
-    mwinddirect.normalize();
-    mwindpower = 24;
+    mterrain.for_each(func);
+
+    setWindDirect({1, 0});
+    mwindpower = 6;
 
     locks.reset(mterrain.getWidth(), mterrain.getHeight());
     locks.fill(false);
+
+//    mterrain.fill(0);
+//    mterrain.at(mterrain.getWidth() / 2, mterrain.getHeight() / 2) = 255;
+//    sandflow();
 }
 
 void PD_Sand::step()
@@ -31,6 +37,26 @@ void PD_Sand::step()
     blowsand();
     sandflow();
     putsands();
+}
+
+void PD_Sand::setWindDirect(Vector2<double> winddirect)
+{
+    assert(winddirect.x != 0 || winddirect.y != 0);
+    mwinddirect = winddirect;
+    mwinddirect.normalize();
+
+    mputedges.clear();
+    if(mwinddirect.x > 0){
+        mputedges.push_back(0);
+    }else if(mwinddirect.x < 0){
+        mputedges.push_back(1);
+    }
+
+    if(mwinddirect.y > 0){
+        mputedges.push_back(2);
+    }else if(mwinddirect.y < 0){
+        mputedges.push_back(3);
+    }
 }
 
 void PD_Sand::blowsand()
@@ -51,7 +77,7 @@ void PD_Sand::blowsandstep()
     double h1 = mterrain.at(p0);
     mterrain.at(p0)--;
 
-    IntPoint p1 = {p0.x + mwinddirect.x * mwindpower, p0.y + mwinddirect.y * mwindpower};
+    IntPoint p1(p0.x + mwinddirect.x * mwindpower, p0.y + mwinddirect.y * mwindpower);
 
     if(!mterrain.pointInSpace(p1))
     {
@@ -65,27 +91,39 @@ void PD_Sand::blowsandstep()
         p1.x -= mwinddirect.x * mwindpower * 0.5;
         p1.y -= mwinddirect.y * mwindpower * 0.5;
     }
-    placeOneParticle({p1.x, p1.y});
+    placeOneParticle(UIntPoint(p1.x, p1.y));
 }
 
 void PD_Sand::sandflow()
 {
     while(sandflowstep());
-    unlockall();
 }
 
 bool PD_Sand::sandflowstep()
 {
     bool r = false;
-    mterrain.for_each([this, &r](unsigned int x, unsigned int y, TerrainValue &)
+    std::function<void (unsigned int, unsigned int, TerrainValue &)> func = [this, &r](unsigned int x, unsigned int y, TerrainValue &)
     {
         if(locks.at(x, y) == false)
         {
             std::vector<IntPoint> points;
 
-            queryhigherpoints({x, y}, 2, points);
+            queryhigherpoints(IntPoint(x, y), 2, points);
 
-            if(points.size() == 0)
+			auto iter = points.begin();
+			for (; iter != points.end();)
+			{
+				if (locks.at(*iter) == true)
+				{
+					iter = points.erase(iter);
+				}
+				else
+				{
+					iter++;
+				}
+			}            
+			
+			if (points.size() == 0)
             {
                 return;
             }
@@ -98,7 +136,10 @@ bool PD_Sand::sandflowstep()
             locks.at(x, y) = true;
             r = true;
         }
-    });
+    };
+
+    mterrain.for_each(func);
+    unlockall();
     return r;
 }
 
@@ -124,5 +165,46 @@ void PD_Sand::sandblowOutofTerrain(const IntPoint &point)
 
 void PD_Sand::putsands()
 {
-    for()
+    for(int i = 0;i < mneedput;i++)
+    {
+        placeOneParticle(getPutPosition());
+    }
+}
+
+UIntPoint PD_Sand::getPutPosition()
+{
+    while(true)
+    {
+        UIntPoint p0(random(0, mterrain.getWidth() - 1), random(0, mterrain.getHeight() - 1));
+        if(pointInWindwardSlope(p0))
+            return {p0.x, p0.y};
+    }
+
+    while(true)
+    {
+        IntPoint p0 = getPutPositionS();
+        int power = random(0, mwindpower * 2);
+        p0.x += mwinddirect.x * power;
+        p0.y += mwinddirect.y * power;
+		if (mterrain.pointInSpace(p0))
+			return UIntPoint(p0.x, p0.y);
+	}
+}
+
+IntPoint PD_Sand::getPutPositionS()
+{
+    assert(mputedges.size() > 0);
+    int k = random(0, mputedges.size() - 1);
+    switch (mputedges[k]) {
+    case 0:
+		return IntPoint(0, random(0, mterrain.getHeight() - 1));
+    case 1:
+		return IntPoint(mterrain.getWidth() - 1, random(0, mterrain.getHeight() - 1));
+    case 2:
+		return IntPoint(random(0, mterrain.getWidth() - 1), 0);
+    case 3:
+		return IntPoint(random(0, mterrain.getWidth() - 1), mterrain.getHeight() - 1);
+    default:
+        assert(false);
+    }
 }

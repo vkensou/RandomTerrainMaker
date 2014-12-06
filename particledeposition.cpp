@@ -35,13 +35,13 @@ bool ParticleDeposition::isfinished()
 
 void ParticleDeposition::placeOneParticle(const UIntPoint &position)
 {
-    IntPoint point0 = {position.x ,position.y};
+    IntPoint point0(position.x ,position.y);
 
     while(true)
     {
         std::vector<IntPoint> points;
 
-        querylowerpoints(point0, random(1, 5), points);
+        querylowerpoints(point0, 2, points);
 
         if(points.size() == 0)
         {

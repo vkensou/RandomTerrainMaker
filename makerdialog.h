@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::MakerDialog *ui;
-    unsigned int w{257}, h{257};
+    unsigned int w{129}, h{129};
     Terrain terrain{w, h};
     TerrainModeling *modeling{nullptr};
     QImage greyimage;
