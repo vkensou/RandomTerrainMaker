@@ -19,15 +19,16 @@ public:
 
 private:
     Ui::MakerDialog *ui;
-    unsigned int w{129}, h{129};
+    unsigned int w{513}, h{513};
     Terrain terrain{w, h};
     TerrainModeling *modeling{nullptr};
     QImage greyimage;
     void updateimage();
     void paintEvent(QPaintEvent *);
     void setModeling(TerrainModeling *);
+    void setTerrainSize(unsigned int width, unsigned int height);
+
 private slots:
-    void btn_init_clicked();
     void btn_start_clicked();
     void btn_step_clicked();
     void btn_erosion_clicked();
@@ -38,6 +39,9 @@ private slots:
     void on_rdb_plate_clicked();
     void on_rdb_particle_clicked();
     void on_rdb_particle_sand_clicked();
+    void on_edt_width_textChanged(const QString &arg1);
+    void on_edt_height_textChanged(const QString &arg1);
+    void on_btn_setsize_clicked();
 };
 
 #endif // MAKERDIALOG_H

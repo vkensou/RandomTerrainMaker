@@ -14,6 +14,7 @@ static bool is2N(unsigned int num)
     }
 }
 
+//the terrain's width or height must = 2 ^ n + 1
 inline bool canbeTerrainWidth(unsigned int width)
 {
     return (width >= 2) && is2N(width-1);

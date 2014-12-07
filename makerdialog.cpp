@@ -9,6 +9,7 @@
 #include "particledeposition.h"
 #include "pd_dla.h"
 #include "pd_sand.h"
+#include "terrainutil.h"
 
 MakerDialog::MakerDialog(QWidget *parent) :
     QDialog(parent),
@@ -17,7 +18,6 @@ MakerDialog::MakerDialog(QWidget *parent) :
     ui->setupUi(this);
     modeling = new FaultFormation(terrain);
 
-    connect(ui->btn_init, SIGNAL(clicked()), this, SLOT(btn_init_clicked()));
     connect(ui->btn_start, SIGNAL(clicked()), this, SLOT(btn_start_clicked()));
     connect(ui->btn_step, SIGNAL(clicked()), this, SLOT(btn_step_clicked()));
     connect(ui->btn_erosion, SIGNAL(clicked()), this, SLOT(btn_erosion_clicked()));
@@ -27,6 +27,12 @@ MakerDialog::MakerDialog(QWidget *parent) :
     QImage gi("grey.bmp", "bmp");
     greyimage = gi.scaled(w, h);
     greyimage.fill(0);
+
+    QString str;
+    str.setNum(terrain.getWidth());
+    ui->edt_width->setText(str);
+    str.setNum(terrain.getHeight());
+    ui->edt_height->setText(str);
 }
 
 MakerDialog::~MakerDialog()
@@ -34,16 +40,14 @@ MakerDialog::~MakerDialog()
     delete ui;
 }
 
-void MakerDialog::btn_init_clicked()
-{
-    terrain.clearup();
-    updateimage();
-}
-
 void MakerDialog::btn_start_clicked()
 {
     if(modeling)
     {
+		ui->btn_step->setEnabled(true);
+		ui->btn_erosion->setEnabled(true);
+		ui->btn_save->setEnabled(true);
+		ui->btn_run->setEnabled(true);
         modeling->start();
         updateimage();
     }
@@ -104,6 +108,21 @@ void MakerDialog::setModeling(TerrainModeling *newmodeling)
         delete modeling;
     }
     modeling = newmodeling;
+	ui->btn_start->setEnabled(true);
+	ui->btn_step->setEnabled(false);
+	ui->btn_erosion->setEnabled(false);
+	ui->btn_save->setEnabled(false);
+    ui->btn_run->setEnabled(false);
+}
+
+void MakerDialog::setTerrainSize(unsigned int width, unsigned int height)
+{
+    assert(canbeTerrainWidth(width) && canbeTerrainWidth(height));
+    terrain.reset(width, height);
+
+	greyimage = greyimage.scaled(terrain.getWidth(), terrain.getHeight());
+	greyimage.fill(0);
+    updateimage();
 }
 
 void MakerDialog::on_rdb_fault_clicked()
@@ -124,4 +143,25 @@ void MakerDialog::on_rdb_particle_clicked()
 void MakerDialog::on_rdb_particle_sand_clicked()
 {
     setModeling(new PD_Sand(terrain));
+}
+
+void MakerDialog::on_edt_width_textChanged(const QString &arg1)
+{
+    int val = arg1.toInt();
+    ui->btn_setsize->setEnabled(canbeTerrainWidth(val));
+}
+
+void MakerDialog::on_edt_height_textChanged(const QString &arg1)
+{
+    int val = arg1.toInt();
+    ui->btn_setsize->setEnabled(canbeTerrainWidth(val));
+}
+
+void MakerDialog::on_btn_setsize_clicked()
+{
+	setTerrainSize(ui->edt_width->text().toInt(), ui->edt_height->text().toInt());
+    ui->btn_step->setEnabled(false);
+	ui->btn_erosion->setEnabled(false);
+    ui->btn_save->setEnabled(false);
+    ui->btn_run->setEnabled(false);
 }
