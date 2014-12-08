@@ -1,10 +1,11 @@
 #ifndef TERRAINUTIL_H
 #define TERRAINUTIL_H
-#include <QTime>
+
 #include <vector>
 #include "vector2.h"
 #include <cmath>
 #include "latticepoint.hpp"
+#include "random.h"
 
 static bool is2N(unsigned int num)
 {
@@ -24,35 +25,6 @@ inline bool canbeTerrainWidth(unsigned int width)
 	return (width >= 2) && is2N(width - 1);
 }
 
-//return [0,1]
-inline double random()
-{
-	return qrand() / (double)RAND_MAX;
-}
-
-//return [0,n]
-inline double random(double n)
-{
-	return qrand() / (double)RAND_MAX * n;
-}
-
-//return [a,b]
-inline double random(double a, double b)
-{
-	return (qrand() / (double)RAND_MAX) * (b - a) + a;
-}
-
-//return [a,b]
-inline int random(int a, int b)
-{
-	return (int)(qrand() / (RAND_MAX + 1.0) * (b - a + 1)) + a;
-}
-
-//return [0,n]
-inline int random(int n)
-{
-	return qrand() / (RAND_MAX + 1.0) * (n + 1);
-}
 
 template<typename T>
 inline void setNum(T &n, T num)

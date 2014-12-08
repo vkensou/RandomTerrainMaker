@@ -1,5 +1,6 @@
 #include "faultformation.h"
 #include "terrainutil.h"
+#include "random.h"
 
 FaultFormation::FaultFormation(Terrain &terrain)
     :TerrainModeling(terrain), mdelta0(10), mdeltan(0)
@@ -17,7 +18,7 @@ void FaultFormation::start()
 
 int changesign(int num)
 {
-    if(qrand() % 2==0)
+    if(rand() % 2==0)
     {
         return -num;
     }
@@ -33,8 +34,8 @@ void FaultFormation::step()
     if(mstepindex == mstepcount) return;
     mstepindex++;
 
-    int x0 = qrand() % mterrain.getWidth(), y0 = qrand() % mterrain.getHeight();
-    int a1 = changesign(qrand()),a2 = changesign(qrand());
+    int x0 = random((int)mterrain.getWidth()), y0 = random((int)mterrain.getHeight());
+    int a1 = changesign(rand()),a2 = changesign(rand());
     double *data = mterrain.getData();
     double delta = mdelta0 + (mstepindex / mstepcount) * (mdeltan - mdelta0);
     for(int j = 0;j<(int)mterrain.getHeight();j++)

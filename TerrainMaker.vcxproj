@@ -172,6 +172,7 @@
     <ClInclude Include="pd_dla.h" />
     <ClInclude Include="pd_sand.h" />
     <ClInclude Include="platedrift.h" />
+    <ClInclude Include="random.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="terrainmodeling.h" />
     <ClInclude Include="terrainutil.h" />

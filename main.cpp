@@ -1,6 +1,6 @@
 #include "makerdialog.h"
 #include <QApplication>
-#include <QTime>
+#include "random.h"
 #include <log4cpp/Category.hh>
 #include <log4cpp/Appender.hh>
 #include <log4cpp/FileAppender.hh>
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     root.info("TerrainMaker start");
 
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+	srand(time(0));
     QApplication a(argc, argv);
     MakerDialog w;
     w.show();
