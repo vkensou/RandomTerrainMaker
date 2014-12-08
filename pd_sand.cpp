@@ -20,7 +20,7 @@ void PD_Sand::start()
     mterrain.for_each(func);
 
     setWindDirect({1, 0});
-    mwindpower = 6;
+    mwindpower = 50;
 
     locks.reset(mterrain.getWidth(), mterrain.getHeight());
     locks.fill(false);
@@ -35,7 +35,7 @@ void PD_Sand::step()
     mstepindex++;
     mneedput = 0;
     blowsand();
-    sandflow();
+    //sandflow();
     putsands();
 }
 
@@ -71,27 +71,40 @@ void PD_Sand::blowsandstep()
 {
     UIntPoint p0(random(0, mterrain.getWidth() - 1), random(0, mterrain.getHeight() - 1));
 
+	auto winddirect = mwinddirect;
+	auto windpower = mwindpower;
     if(pointInLeewardSlope(p0))
-        return;
+	{ 
+		//return;
+		winddirect.x = -mwinddirect.x;
+		winddirect.y = -mwinddirect.y;
+		windpower = mwindpower / 5;
+	}
+        
 
     double h1 = mterrain.at(p0);
     mterrain.at(p0)--;
 
-    IntPoint p1(p0.x + mwinddirect.x * mwindpower, p0.y + mwinddirect.y * mwindpower);
+	IntPoint p1(p0.x + winddirect.x * windpower, p0.y + winddirect.y * windpower);
 
-    if(!mterrain.pointInSpace(p1))
+    if(mterrain.pointInSpace(p1))
     {
-        sandblowOutofTerrain(p1);
-        return;
+		double h2 = mterrain.at(p1);
+		if(h2 < h1)
+		{
+			p1.x -= winddirect.x * windpower * 0.5;
+			p1.y -= winddirect.y * windpower * 0.5;
+		}
+		placeOneParticle(UIntPoint(p1.x, p1.y), 2);
     }
+	else
+	{
+		p1.x = roundnum(p1.x, mterrain.getWidth());
+		p1.y = roundnum(p1.y, mterrain.getHeight());
 
-    double h2 = mterrain.at(p1);
-    if(h2 < h1)
-    {
-        p1.x -= mwinddirect.x * mwindpower * 0.5;
-        p1.y -= mwinddirect.y * mwindpower * 0.5;
-    }
-    placeOneParticle(UIntPoint(p1.x, p1.y));
+		placeOneParticle(UIntPoint(p1.x, p1.y), 2);
+        //sandblowOutofTerrain(p1);
+	}
 }
 
 void PD_Sand::sandflow()
@@ -167,7 +180,7 @@ void PD_Sand::putsands()
 {
     for(int i = 0;i < mneedput;i++)
     {
-        placeOneParticle(getPutPosition());
+        placeOneParticle(getPutPosition(), 2);
     }
 }
 

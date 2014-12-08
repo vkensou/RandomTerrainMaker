@@ -19,6 +19,6 @@ void PD_DLA::step()
     mstepindex++;
     for(unsigned int i = 0;i < fallpoints.size();i++)
     {
-        placeOneParticle(fallpoints.at(i));
+        placeOneParticle(fallpoints.at(i), 1);
     }
 }

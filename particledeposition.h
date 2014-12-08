@@ -17,7 +17,7 @@ public:
     bool isfinished() override;
 
 protected:
-    void placeOneParticle(const UIntPoint &position);
+    void placeOneParticle(const UIntPoint &position, int radius);
 
     void queryNearbyPointsIf(const IntPoint &point0, int radius, std::vector<IntPoint> &points,
                              std::function<void(const IntPoint &point, std::vector<IntPoint> &points)> func);

@@ -16,7 +16,12 @@ void ParticleDeposition::step()
 {
     mstepindex++;
 
-    placeOneParticle({0, 0});
+	for (int i = 0; i < 100; i++)
+		placeOneParticle({mterrain.getWidth() / 4, mterrain.getHeight() / 2}, 1);
+	for (int i = 0; i < 100; i++)
+		placeOneParticle({ mterrain.getWidth() / 2, mterrain.getHeight() / 2 }, 2);
+	for (int i = 0; i < 100; i++)
+		placeOneParticle({ mterrain.getWidth() * 3 / 4, mterrain.getHeight() / 2 }, 3);
 
 }
 
@@ -33,7 +38,7 @@ bool ParticleDeposition::isfinished()
     return false;
 }
 
-void ParticleDeposition::placeOneParticle(const UIntPoint &position)
+void ParticleDeposition::placeOneParticle(const UIntPoint &position, int radius)
 {
     IntPoint point0(position.x ,position.y);
 
@@ -41,7 +46,7 @@ void ParticleDeposition::placeOneParticle(const UIntPoint &position)
     {
         std::vector<IntPoint> points;
 
-        querylowerpoints(point0, 2, points);
+		querylowerpoints(point0, radius, points);
 
         if(points.size() == 0)
         {
@@ -59,18 +64,17 @@ void ParticleDeposition::placeOneParticle(const UIntPoint &position)
 void ParticleDeposition::queryNearbyPointsIf(const IntPoint &point0, int radius, std::vector<IntPoint> &points,
                                              std::function<void(const IntPoint &point, std::vector<IntPoint> &points)> func)
 {
-    double h0 = mterrain.at(point0);
-    int x0 = point0.x, y0 = point0.y;
-    for(int j = y0 - radius;j <= y0 + radius;j++)
-    {
-        for(int i = x0 - radius;i <= x0 + radius;i++)
-        {
-            IntPoint point(i, j);
-            int distance = point0.distanceTo(point);
-            if(distance <= radius)
-                func(point, points);
-        }
-    }
+	assert(radius > 0);
+
+	for (int i = 1; i <= radius; i++)
+	{
+		std::vector<Vector2<int>> &allpoints = getPointsDistanceIs(i);
+		for (int j = 0; j < allpoints.size(); j++)
+		{
+			func({ point0.x + allpoints[j].x, point0.y + allpoints[j].y }, points);
+		}
+		if (points.size() > 0)return;
+	}
 }
 
 void ParticleDeposition::querylowerpoints(const IntPoint &point0, int radius, std::vector<IntPoint> &points)

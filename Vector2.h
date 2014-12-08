@@ -1,5 +1,5 @@
-#ifndef POINT_H
-#define POINT_H
+#ifndef VECTOR2_H
+#define VECTOR2_H
 
 #include <math.h>
 
@@ -44,4 +44,4 @@ void Vector2<T>::normalize()
 typedef Vector2<int> IntPoint;
 typedef Vector2<unsigned int> UIntPoint;
 
-#endif // POINT_H
+#endif // VECTOR2_H

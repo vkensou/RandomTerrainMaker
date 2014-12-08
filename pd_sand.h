@@ -15,14 +15,20 @@ public:
     void setWindDirect(Vector2<double> winddirect);
 
 private:
+	//The sand blown by the wind
     void blowsand();
     void blowsandstep();
+
+	//Sand from high to low
     void sandflow();
     bool sandflowstep();
     void unlockall();
+
     bool pointInWindwardSlope(const UIntPoint &point);
     bool pointInLeewardSlope(const UIntPoint &point);
     void sandblowOutofTerrain(const IntPoint &point);
+
+	//put sands into terrain again, that were blown out of terrain.
     void putsands();
     UIntPoint getPutPosition();
     IntPoint getPutPositionS();
