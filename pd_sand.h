@@ -4,6 +4,7 @@
 #include "particledeposition.h"
 #include "elementspace2d.h"
 #include <vector>
+#include "direct.h"
 
 class PD_Sand : public ParticleDeposition
 {
@@ -12,7 +13,7 @@ public:
 
     void start() override;
     void step() override;
-    void setWindDirect(Vector2<double> winddirect);
+    void setWindDirect(Direct winddirect);
 
 private:
 	//The sand blown by the wind
@@ -35,7 +36,7 @@ private:
 
 private:
     ElementSpace2D<bool> locks;
-    Vector2<double> mwinddirect;
+    Direct mwinddirect;
     int mwindpower;
     int mneedput;
     std::vector<int> mputedges; //left edge -- 0, right edge -- 1, up edge -- 2, down edge --3

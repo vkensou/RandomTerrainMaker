@@ -1,7 +1,6 @@
 #pragma once
 
 #include "vector2.h"
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 class EightDirect
@@ -47,24 +46,45 @@ public:
 		while (degree >= 360)degree -= 360;
 		while (degree < 0)degree += 360;
 
+		//if (degree < 22.5)
+		//	direct = LEFT;
+		//else if (degree < 67.5)
+		//	direct = LEFTUP;
+		//else if (degree < 112.5)
+		//	direct = UP;
+		//else if (degree < 157.5)
+		//	direct = RIGHTUP;
+		//else if (degree < 202.5)
+		//	direct = RIGHT;
+		//else if (degree < 247.5)
+		//	direct = RIGHTDOWN;
+		//else if (degree < 292.5)
+		//	direct = DOWN;
+		//else if (degree < 337.5)
+		//	direct = LEFTDOWN;
+		//else
+		//	direct = LEFT;
+
 		if (degree < 22.5)
-			direct = LEFT;
-		else if (degree < 67.5)
-			direct = LEFTUP;
-		else if (degree < 112.5)
-			direct = UP;
-		else if (degree < 157.5)
-			direct = RIGHTUP;
-		else if (degree < 202.5)
 			direct = RIGHT;
-		else if (degree < 247.5)
+		else if (degree < 67.5)
 			direct = RIGHTDOWN;
-		else if (degree < 292.5)
+		else if (degree < 112.5)
 			direct = DOWN;
-		else if (degree < 337.5)
+		else if (degree < 157.5)
 			direct = LEFTDOWN;
-		else
+		else if (degree < 202.5)
 			direct = LEFT;
+		else if (degree < 247.5)
+			direct = LEFTUP;
+		else if (degree < 292.5)
+			direct = UP;
+		else if (degree < 337.5)
+			direct = RIGHTUP;
+		else
+			direct = RIGHT;
+
+		return *this;
 	}
 
 private:

@@ -2,6 +2,8 @@
 #include <memory.h>
 #include <assert.h>
 #include "terrainutil.h"
+#include "direct.h"
+#include "eightdirect.h"
 
 Terrain::Terrain(unsigned int width, unsigned int height)
     :ElementSpace2D(width, height)
@@ -16,18 +18,13 @@ void Terrain::reset(unsigned int width, unsigned int height)
     ElementSpace2D::reset(width, height);
 }
 
-int Terrain::getPointGradient(const UIntPoint &point, const Vector2<double> &direct)
+int Terrain::getPointGradient(const UIntPoint &point, const Direct &direct)
 {
-    auto d = direct;
-    if(d.x > 0)
-        d.x = 1;
-    else if(d.x < 0)
-        d.x = -1;
-
-    if(d.y > 0)
-        d.y = 1;
-    else if(d.y < 0)
-        d.y = -1;
+	auto nd = direct;
+	double radian = nd.toRadian();
+	EightDirect d8;
+	d8 = radian;
+	Vector2<int> d = d8;
 
     int xa = point.x + d.x, ya = point.y + d.y;
     int xb = point.x - d.x, yb = point.y - d.y;

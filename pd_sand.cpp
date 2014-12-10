@@ -19,14 +19,11 @@ void PD_Sand::start()
 
     mterrain.for_each(func);
 
-    setWindDirect({-1, 0});
-    mwindpower = 5;
+    setWindDirect({-0.1, 0});
+    mwindpower = 10;
 
     locks.reset(mterrain.getWidth(), mterrain.getHeight());
     locks.fill(false);
-//    mterrain.fill(0);
-//    mterrain.at(mterrain.getWidth() / 2, mterrain.getHeight() / 2) = 255;
-//    sandflow();
 }
 
 void PD_Sand::step()
@@ -38,7 +35,7 @@ void PD_Sand::step()
     putsands();
 }
 
-void PD_Sand::setWindDirect(Vector2<double> winddirect)
+void PD_Sand::setWindDirect(Direct winddirect)
 {
     assert(winddirect.x != 0 || winddirect.y != 0);
     mwinddirect = winddirect;
