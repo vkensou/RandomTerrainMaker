@@ -40,6 +40,8 @@ public:
 	//get lattice points in circle:(0, 0) radius
 	static void getFromCircle(int radius, std::vector<Vector2<int>> &points)
 	{
+		assert(radius >= 0);
+
 		points.push_back({ 0, 0 });
 		for (int i = 1; i <= radius; i++)
 		{
@@ -75,8 +77,10 @@ public:
 	}
 
 	//get lattice points in circle:(0, 0) (smallradius, bigradius]
-	static void getFromRing(double bigradius, double smallradius, std::vector<Vector2<int>> &points)
+	static void getFromRing(int bigradius, int smallradius, std::vector<Vector2<int>> &points)
 	{
+		assert(bigradius == smallradius + 1 && smallradius >= 0);
+
 		pushAxisPoints(bigradius, points);
 		int x1b = floor(bigradius / sqrt(2));
 		int x1s = floor(smallradius / sqrt(2));
@@ -110,6 +114,7 @@ public:
 	static int getNumbleofCircle(double radius)
 	{
 		assert(radius >= 0);
+
 		unsigned int r = (int)radius;
 		unsigned int sigma = 0;
 
@@ -124,6 +129,7 @@ public:
 	static int getNumberofRing(double bigradius, double smallradius)
 	{
 		assert(bigradius > smallradius && smallradius >= 0);
+
 		return getNumbleofCircle(bigradius) - getNumbleofCircle(smallradius);
 	}
 };

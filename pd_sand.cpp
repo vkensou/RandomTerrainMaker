@@ -19,12 +19,11 @@ void PD_Sand::start()
 
     mterrain.for_each(func);
 
-    setWindDirect({1, 0});
-    mwindpower = 50;
+    setWindDirect({-1, 0});
+    mwindpower = 5;
 
     locks.reset(mterrain.getWidth(), mterrain.getHeight());
     locks.fill(false);
-
 //    mterrain.fill(0);
 //    mterrain.at(mterrain.getWidth() / 2, mterrain.getHeight() / 2) = 255;
 //    sandflow();
@@ -35,7 +34,7 @@ void PD_Sand::step()
     mstepindex++;
     mneedput = 0;
     blowsand();
-    //sandflow();
+    sandflow();
     putsands();
 }
 
@@ -75,10 +74,10 @@ void PD_Sand::blowsandstep()
 	auto windpower = mwindpower;
     if(pointInLeewardSlope(p0))
 	{ 
-		//return;
-		winddirect.x = -mwinddirect.x;
-		winddirect.y = -mwinddirect.y;
-		windpower = mwindpower / 5;
+		return;
+		//winddirect.x = -mwinddirect.x;
+		//winddirect.y = -mwinddirect.y;
+		//windpower = mwindpower / 5;
 	}
         
 
@@ -90,6 +89,16 @@ void PD_Sand::blowsandstep()
     if(mterrain.pointInSpace(p1))
     {
 		double h2 = mterrain.at(p1);
+		//if (h2 > h1)
+		//{
+		//	p1.x -= winddirect.x * 1;
+		//	p1.y -= winddirect.y * 1;
+		//}
+		//else
+		//{
+		//	p1.x -= winddirect.x * 2;
+		//	p1.y -= winddirect.y * 2;
+		//}
 		if(h2 < h1)
 		{
 			p1.x -= winddirect.x * windpower * 0.5;

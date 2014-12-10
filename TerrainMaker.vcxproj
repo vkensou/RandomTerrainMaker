@@ -153,6 +153,8 @@
     <ClCompile Include="terrainmodeling.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="direct.h" />
+    <ClInclude Include="eightdirect.h" />
     <ClInclude Include="elementspace2d.h" />
     <ClInclude Include="fallpoints.h" />
     <ClInclude Include="faultformation.h" />

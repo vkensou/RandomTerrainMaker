@@ -2,6 +2,7 @@
 #define TERRAINUTIL_H
 
 #include <vector>
+#include <map>
 #include "vector2.h"
 #include <cmath>
 #include "latticepoint.hpp"
@@ -62,17 +63,16 @@ inline int clipnum(int a, int w)
 
 inline std::vector<Vector2<int>> &getPointsDistanceIs(int distance)
 {
-	static std::vector<std::vector<Vector2<int>>> list;
-	if (distance > list.size())
+	static std::map<int, std::vector<Vector2<int>>> list;
+
+	if (list.find(distance) == list.end())
 	{
-		for (int i = list.size(); i < distance + 5; i++)
-		{
-			std::vector<Vector2<int>> newlist;
-			LatticePoint::getFromRing(i + 1, i, newlist);
-			list.push_back(newlist);
-		}
+		std::vector<Vector2<int>> newlist;
+		LatticePoint::getFromRing(distance, distance - 1, newlist);
+		list.insert({ distance, newlist });
 	}
-	return list[distance - 1];
+
+	return list[distance];
 }
 
 #endif // TERRAINUTIL_H
