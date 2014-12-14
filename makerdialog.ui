@@ -18,7 +18,7 @@
     <rect>
      <x>860</x>
      <y>110</y>
-     <width>175</width>
+     <width>181</width>
      <height>91</height>
     </rect>
    </property>
@@ -44,9 +44,19 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QRadioButton" name="rdb_particle_sand2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string>Particle Deposition(Sand2)</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>720</x>
@@ -97,7 +107,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>720</x>
@@ -163,4 +173,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <slots>
+  <slot>on_rdb_particle_sand2_clicked()</slot>
+ </slots>
 </ui>

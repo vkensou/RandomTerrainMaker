@@ -9,6 +9,7 @@
 #include "particledeposition.h"
 #include "pd_dla.h"
 #include "pd_sand.h"
+#include "pd_sand2.h"
 #include "terrainutil.h"
 
 MakerDialog::MakerDialog(QWidget *parent) :
@@ -164,4 +165,9 @@ void MakerDialog::on_btn_setsize_clicked()
 	ui->btn_erosion->setEnabled(false);
     ui->btn_save->setEnabled(false);
     ui->btn_run->setEnabled(false);
+}
+
+void MakerDialog::on_rdb_particle_sand2_clicked()
+{
+	setModeling(new PD_Sand2(terrain));
 }

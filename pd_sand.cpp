@@ -4,7 +4,7 @@
 
 PD_Sand::PD_Sand(Terrain &terrain)
     :ParticleDeposition(terrain)
-    ,mwinddirect(0, 0)
+    ,mwinddirect(1, 0)
 {
 }
 

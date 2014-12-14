@@ -71,7 +71,16 @@ void ParticleDeposition::queryNearbyPointsIf(const IntPoint &point0, int radius,
 		std::vector<Vector2<int>> &allpoints = getPointsDistanceIs(i);
 		for (int j = 0; j < allpoints.size(); j++)
 		{
-			func({ point0.x + allpoints[j].x, point0.y + allpoints[j].y }, points);
+			IntPoint point;
+			if (mterrain.getExtension() != Terrain::NONE)
+			{
+				point = mterrain.extend({ point0.x + allpoints[j].x, point0.y + allpoints[j].y });
+			}
+			else
+			{
+				point = { point0.x + allpoints[j].x, point0.y + allpoints[j].y };
+			}
+			func(point, points);
 		}
 		if (points.size() > 0)return;
 	}

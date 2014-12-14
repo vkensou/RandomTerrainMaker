@@ -39,6 +39,7 @@ private slots:
     void on_rdb_plate_clicked();
     void on_rdb_particle_clicked();
     void on_rdb_particle_sand_clicked();
+    void on_rdb_particle_sand2_clicked();
     void on_edt_width_textChanged(const QString &arg1);
     void on_edt_height_textChanged(const QString &arg1);
     void on_btn_setsize_clicked();

@@ -20,27 +20,60 @@ void Terrain::reset(unsigned int width, unsigned int height)
 
 int Terrain::getPointGradient(const UIntPoint &point, const Direct &direct)
 {
+	assert(pointInSpace(point));
 	auto nd = direct;
 	double radian = nd.toRadian();
 	EightDirect d8;
 	d8 = radian;
 	Vector2<int> d = d8;
 
-    int xa = point.x + d.x, ya = point.y + d.y;
-    int xb = point.x - d.x, yb = point.y - d.y;
-    xa = clipnum(xa, getWidth());
-    ya = clipnum(ya, getHeight());
-    xb = clipnum(xb, getWidth());
-    yb = clipnum(yb, getHeight());
-
-    UIntPoint pa(xa, ya), pb(xb, yb);   //point after, point behind
+	auto pa = extend(IntPoint(point.x + d.x, point.y + d.y));
+	auto pb = extend(IntPoint(point.x - d.x, point.y - d.y));
 
     int ha = at(pa) - at(point), hb = at(point) - at(pb);
 
-    if(ha > 0 && hb >= 0)
-        return 1;
-    if(hb < 0 && ha <= 0)
-        return -1;
-    return 0;
+	if (ha >= 0 && hb >= 0)
+	{
+		if (ha != 0 || hb != 0)
+			return 1;
+	}
+	else if (ha <= 0 && hb <= 0)
+	{
+		if (ha != 0 || hb != 0)
+			return -1;
+	}
+	else
+		return 0;
 }
 
+IntPoint Terrain::extend(const IntPoint &point)
+{
+	IntPoint p1;
+	if (mextension == CYCLE)
+	{
+		p1.x = roundnum(point.x, getWidth());
+		p1.y = roundnum(point.y, getHeight());
+	}
+	else if (mextension == SYMMETRIC)
+	{
+		p1.x = clipnum(point.x, getWidth());
+		p1.y = clipnum(point.y, getHeight());
+	}
+	else if (mextension = NONE)
+	{
+		if (point.x < 0)
+			p1.x = 0;
+		else if (point.x >= getWidth())
+			p1.x = getWidth() - 1;
+		else
+			p1.x = point.x;
+
+		if (point.y < 0)
+			p1.y = 0;
+		else if (point.y >= getHeight())
+			p1.y = getHeight() - 1;
+		else
+			p1.y = point.y;
+	}
+	return p1;
+}

@@ -83,6 +83,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_makerdialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="pd_sand2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="elementspace2d.h">
@@ -136,7 +139,10 @@
     <ClInclude Include="eightdirect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ray.h">
+    <ClInclude Include="ray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pd_sand2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
