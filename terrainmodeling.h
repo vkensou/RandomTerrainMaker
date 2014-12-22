@@ -12,8 +12,8 @@ public:
     virtual void step() = 0;
     virtual void generate();
     virtual bool isfinished(){return mstepindex >= mstepcount;}
+    virtual void test(){};
     void erosion();
-
 protected:
     Terrain &mterrain;
     unsigned int mstepcount;

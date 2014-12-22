@@ -19,8 +19,7 @@ public:
 
 private:
     Ui::MakerDialog *ui;
-    unsigned int w{513}, h{513};
-    Terrain terrain{w, h};
+    Terrain terrain{257, 257};
     TerrainModeling *modeling{nullptr};
     QImage greyimage;
     void updateimage();
@@ -43,6 +42,7 @@ private slots:
     void on_edt_width_textChanged(const QString &arg1);
     void on_edt_height_textChanged(const QString &arg1);
     void on_btn_setsize_clicked();
+    void on_btn_test_clicked();
 };
 
 #endif // MAKERDIALOG_H

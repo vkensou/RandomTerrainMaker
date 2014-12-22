@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     particledeposition.cpp \
     fallpoints.cpp \
     pd_sand.cpp \
-    pd_dla.cpp
+    pd_dla.cpp \
+    pd_sand2.cpp \
+    wind.cpp \
+    Angle.cpp
 
 HEADERS  += makerdialog.h \
     terrain.h \
@@ -34,7 +37,14 @@ HEADERS  += makerdialog.h \
     pd_sand.h \
     pd_dla.h \
     elementspace2d.h \
-    vector2.h
+    vector2.h \
+    pd_sand2.h \
+    ray.hpp \
+    latticepoint.hpp \
+    direct.h \
+    wind.h \
+    angle.h \
+    random.h
 
 FORMS    += makerdialog.ui
 
@@ -47,3 +57,5 @@ DEPENDPATH += $$PWD/../../libraries/log4cpp/include
 
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../libraries/log4cpp/qtcreator/release/log4cpp.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/../../libraries/log4cpp/qtcreator/release/liblog4cpp.a
+
+DEFINES += _USE_MATH_DEFINES

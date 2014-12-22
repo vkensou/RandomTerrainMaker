@@ -36,7 +36,9 @@ public:
 	bool pointInSpace(const IntPoint &point){ return pointInSpace(point.x, point.y); }
 	bool pointInSpace(const UIntPoint &point){ return pointInSpace(point.x, point.y); }
 
-	void for_each(std::function<void(unsigned int i, ElementType &value)> func);
+    void for_each(std::function<void(ElementType &value)> func);
+
+    void for_each(std::function<void(unsigned int i, ElementType &value)> func);
 
 	void for_each(std::function<void(unsigned int x, unsigned int y, ElementType &value)> func);
 
@@ -106,6 +108,15 @@ template <typename ElementType>
 const ElementType &ElementSpace2D<ElementType>::at(unsigned int i) const
 {
 	return at(i);
+}
+
+template <typename ElementType>
+void ElementSpace2D<ElementType>::for_each(std::function<void(ElementType &)> func)
+{
+    for (unsigned int i = 0; i < mwidth * mheight; i++)
+    {
+        func(at(i));
+    }
 }
 
 template <typename ElementType>

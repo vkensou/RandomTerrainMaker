@@ -26,7 +26,7 @@ MakerDialog::MakerDialog(QWidget *parent) :
     connect(ui->btn_run, SIGNAL(clicked()), this, SLOT(btn_run_clicked()));
 
     QImage gi("grey.bmp", "bmp");
-    greyimage = gi.scaled(w, h);
+	greyimage = gi.scaled(terrain.getWidth(), terrain.getHeight());
     greyimage.fill(0);
 
     QString str;
@@ -47,8 +47,6 @@ void MakerDialog::btn_start_clicked()
     {
 		ui->btn_step->setEnabled(true);
 		ui->btn_erosion->setEnabled(true);
-		ui->btn_save->setEnabled(true);
-		ui->btn_run->setEnabled(true);
         modeling->start();
         updateimage();
     }
@@ -89,7 +87,7 @@ void MakerDialog::updateimage()
     {
         for(unsigned int i = 0;i < terrain.getWidth();i++)
         {
-            greyimage.setPixel(i, j, (unsigned char)terrain.getData()[j*terrain.getWidth() + i]);
+			greyimage.setPixel(i, j, (unsigned char)terrain.at(i, j));
         }
     }
 
@@ -112,8 +110,7 @@ void MakerDialog::setModeling(TerrainModeling *newmodeling)
 	ui->btn_start->setEnabled(true);
 	ui->btn_step->setEnabled(false);
 	ui->btn_erosion->setEnabled(false);
-	ui->btn_save->setEnabled(false);
-    ui->btn_run->setEnabled(false);
+    ui->btn_test->setEnabled(true);
 }
 
 void MakerDialog::setTerrainSize(unsigned int width, unsigned int height)
@@ -146,6 +143,11 @@ void MakerDialog::on_rdb_particle_sand_clicked()
     setModeling(new PD_Sand(terrain));
 }
 
+void MakerDialog::on_rdb_particle_sand2_clicked()
+{
+    setModeling(new PD_Sand2(terrain));
+}
+
 void MakerDialog::on_edt_width_textChanged(const QString &arg1)
 {
     int val = arg1.toInt();
@@ -163,11 +165,13 @@ void MakerDialog::on_btn_setsize_clicked()
 	setTerrainSize(ui->edt_width->text().toInt(), ui->edt_height->text().toInt());
     ui->btn_step->setEnabled(false);
 	ui->btn_erosion->setEnabled(false);
-    ui->btn_save->setEnabled(false);
-    ui->btn_run->setEnabled(false);
 }
 
-void MakerDialog::on_rdb_particle_sand2_clicked()
+void MakerDialog::on_btn_test_clicked()
 {
-	setModeling(new PD_Sand2(terrain));
+	if (modeling)
+	{
+		modeling->test();
+		updateimage();
+	}
 }

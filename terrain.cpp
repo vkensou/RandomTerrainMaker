@@ -27,23 +27,22 @@ int Terrain::getPointGradient(const UIntPoint &point, const Direct &direct)
 	d8 = radian;
 	Vector2<int> d = d8;
 
-	auto pa = extend(IntPoint(point.x + d.x, point.y + d.y));
-	auto pb = extend(IntPoint(point.x - d.x, point.y - d.y));
+    auto pa = extend(IntPoint(point.x + d.x, point.y + d.y));//point after
+    auto pb = extend(IntPoint(point.x - d.x, point.y - d.y));//point behind
 
-    int ha = at(pa) - at(point), hb = at(point) - at(pb);
+    auto func = [](int p1, int p2)
+    {
+        if(p1 < p2)
+            return -1;
+        else if(p1 == p2)
+            return 0;
+        else
+            return 1;
+    };
 
-	if (ha >= 0 && hb >= 0)
-	{
-		if (ha != 0 || hb != 0)
-			return 1;
-	}
-	else if (ha <= 0 && hb <= 0)
-	{
-		if (ha != 0 || hb != 0)
-			return -1;
-	}
-	else
-		return 0;
+    int hb = func(at(pb), at(point)), ha = func(at(point), at(pa));
+
+    return (hb + 1) * 3 + (ha + 2);
 }
 
 IntPoint Terrain::extend(const IntPoint &point)

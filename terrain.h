@@ -22,6 +22,8 @@ public:
 
     void reset(unsigned int width, unsigned int height) override;
 
+    // 1 //, 2 /-,3 /\, 4-/,5--,6-\,7\/,8\-,9\\.
+
     int getPointGradient(const UIntPoint &point, const Direct &direct);
 private:
 	Extension mextension{ NONE };

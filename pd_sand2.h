@@ -3,6 +3,8 @@
 #include "particledeposition.h"
 #include "elementspace2d.h"
 #include "direct.h"
+#include <qstring.h>
+#include "wind.h"
 
 class PD_Sand2
 	:public ParticleDeposition
@@ -12,7 +14,7 @@ public:
 
 	void start() override;
 	void step() override;
-	void setWindDirect(Direct winddirect);
+	void test() override;
 
 private:
 	//sands deposit ,which fly with wind 
@@ -29,14 +31,17 @@ private:
 	bool sandflowstep();
 	void unlockall();
 
-	bool pointInWindwardSlope(const UIntPoint &point);
-	bool pointInLeewardSlope(const UIntPoint &point);
+    bool pointCanBeEroded(const UIntPoint &point);
+    bool pointIsSettleable(const UIntPoint &point);
 
+    void queryUnlockedHigherPoints(const IntPoint &point0, int radius, std::vector<IntPoint> &points);
+    void queryUnlockedHigherPoints(const IntPoint &point0, const Radian &radian, std::vector<IntPoint> &points);
+
+	void savetobmp(const QString &filename);
 private:
 	ElementSpace2D<bool> locks;
-	Direct mwinddirect;
-	int mwindpower;
-	int deposit;
-	int erosiveness;
+    Wind mwind;
+    Radian angleofWindward;
+    Radian angleofLeeward;
 };
 

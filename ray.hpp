@@ -11,7 +11,7 @@ public:
 	Vector2<double> startpoint{ 0, 0 };
 	Direct direct{ 1, 0 };
 
-	Ray(Vector2<double> &startpoint, Direct &direct)
+    Ray(Vector2<double> &startpoint, const Direct &direct)
 		:startpoint(startpoint), direct(direct)
 	{
 		assert(direct.x != 0 || direct.y != 0);
