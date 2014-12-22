@@ -9,7 +9,7 @@ log4cpp::Category & logg2 =log4cpp::Category::getRoot().getInstance("TerrainMake
 
 PD_Sand2::PD_Sand2(Terrain &terrain)
 	:ParticleDeposition(terrain)
-    ,mwind(Direct(1, 0), 10, 1)
+    ,mwind(Direct(1, 0), 5, 1)
 {
 }
 
@@ -27,8 +27,8 @@ void PD_Sand2::start()
 //    };
 //    mterrain.for_each(func);
 
-    for (int i = 0; i < 1000; i++)
-        placeOneParticle({ mterrain.getWidth() / 2, mterrain.getHeight() / 2 }, Degree(random(8, 20)));
+    for (int i = 0; i < 10000; i++)
+        placeOneParticle({ mterrain.getWidth() / 2, mterrain.getHeight() / 2 }, Degree(35));
 
 	//when mwindpower == 20, will generates ripples
 	locks.reset(mterrain.getWidth(), mterrain.getHeight());
@@ -42,7 +42,7 @@ void PD_Sand2::step()
 {
     mstepindex++;
     logg2.debug("step %d:", mstepindex);
-    sanddeposit();
+//    sanddeposit();
     blowsand();
     sandflow();
     mwind.setSediment(mwind.getSediment() * 0.9);
@@ -55,7 +55,7 @@ void PD_Sand2::step()
 
 void PD_Sand2::blowsand()
 {
-    for (int i = 0; i < mwind.getErosionRate() * mterrain.getSize(); i++)
+    for (int i = 0; i < /*mwind.getErosionRate() **/ mterrain.getSize(); i++)
 	{
 		blowsandstep();
 	}
@@ -65,13 +65,14 @@ void PD_Sand2::blowsandstep()
 {
 	UIntPoint p0(random(0, mterrain.getWidth() - 1), random(0, mterrain.getHeight() - 1));
 
-    if(!pointCanBeEroded(p0))
+    if(!canBeBlowed(p0))
         return;
 
     mterrain.at(p0)--;
     TerrainValue h0 = mterrain.at(p0);
 
-    double windpower = random(0, mwind.getPower());
+    double windpower = random(mwind.getPowerwithHeight(h0));
+
 	//windpower = mwindpower;
     Vector2<double> startpoint = {p0.x, p0.y};
     Ray ray(startpoint, mwind.getDirect());
@@ -88,11 +89,16 @@ void PD_Sand2::blowsandstep()
         else if (h1 < h0)
             windpower -= 2;
 
+        if(h1 == 0 && h0 == 0)
+        {
+            return false;
+        }
+
 		h0 = h1;
-		if (windpower < 0)
+        if (windpower <= 0)
 		{
 //            mterrain.at(p1)++;
-            placeOneParticle(UIntPoint(p1.x, p1.y), Degree(random(28, 34)));
+            placeOneParticle(UIntPoint(p1.x, p1.y), Degree(35));
 			return false;
 		}
 		return true;
@@ -115,7 +121,7 @@ bool PD_Sand2::sandflowstep()
 		{
 			std::vector<IntPoint> points;
 
-            queryUnlockedHigherPoints(IntPoint(x, y), Radian(Degree(random(8, 20))), points);
+            queryUnlockedHigherPoints(IntPoint(x, y), Radian(Degree(35)), points);
 
 			if (points.size() == 0)
 			{
@@ -188,6 +194,15 @@ void PD_Sand2::sandblowOutofTerrain(const IntPoint &point)
 
 }
 
+bool PD_Sand2::canBeBlowed(const UIntPoint &point)
+{
+    if(pointCanBeEroded(point) && random() < mwind.getPowerwithHeight(mterrain.at(point)) / Wind::MAX_POWER)
+//    if(pointCanBeEroded(point))
+        return true;
+    else
+        return false;
+}
+
 void PD_Sand2::sanddeposit()
 {
     for (int i = 0; i < mwind.getDepositRate() * mterrain.getSize(); i++)
@@ -201,19 +216,19 @@ void PD_Sand2::sanddepositstep()
 	unsigned int x0 = random(0, mterrain.getWidth() - 1), y0 = random(0, mterrain.getHeight() - 1);
     if (pointIsSettleable({ x0, y0 }))
     {
-        placeOneParticle({ x0, y0 }, Degree(random(8, 20)));
+        placeOneParticle({ x0, y0 }, Degree(35));
     }
 }
 
 void PD_Sand2::test()
 {
-    int testid = 26;
+    int testid = 27;
 	QString fmt("s%1_s%2.bmp");
 	QString filename;
 	start();
 	filename = fmt.arg(testid).arg(0);
 	savetobmp(filename);
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 30; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
@@ -241,5 +256,5 @@ void PD_Sand2::savetobmp(const QString &filename)
 		}
 	}
 
-	testimage.save(filename);
+    testimage.save(filename);
 }

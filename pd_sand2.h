@@ -25,6 +25,7 @@ private:
 	void blowsand();
 	void blowsandstep();
 	void sandblowOutofTerrain(const IntPoint &point);
+    bool canBeBlowed(const UIntPoint &point);
 
 	//Sands flow from high to low
 	void sandflow();
