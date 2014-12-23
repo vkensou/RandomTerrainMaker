@@ -10,19 +10,14 @@ void ParticleDeposition::start()
 {
     mstepindex = 0;
     mterrain.fill(0);
+
+    for (int i = 0; i < 10000; i++)
+        placeOneParticle({mterrain.getWidth() / 2, mterrain.getHeight() / 2}, 3, 1);
 }
 
 void ParticleDeposition::step()
 {
     mstepindex++;
-
-	for (int i = 0; i < 100; i++)
-		placeOneParticle({mterrain.getWidth() / 4, mterrain.getHeight() / 2}, 1);
-	for (int i = 0; i < 100; i++)
-		placeOneParticle({ mterrain.getWidth() / 2, mterrain.getHeight() / 2 }, 2);
-	for (int i = 0; i < 100; i++)
-		placeOneParticle({ mterrain.getWidth() * 3 / 4, mterrain.getHeight() / 2 }, 3);
-
 }
 
 void ParticleDeposition::generate()
@@ -53,7 +48,7 @@ void ParticleDeposition::placeOneParticle(const UIntPoint &position, int radius,
             break;
         }
 
-        int k = random(0, points.size() - 1);
+        int k = getPointRandomly(points);
 
         point0 = points[k];
     }
@@ -140,5 +135,27 @@ void ParticleDeposition::queryhigherpoints(const IntPoint &point0, int radius, i
     };
 
     queryNearbyPointsIf(point0, radius, points, func);
+}
+
+int ParticleDeposition::getPointRandomly(std::vector<IntPoint> &points)
+{
+    std::vector<double> distances;
+    std::vector<double> weights;
+    double sum = 0;
+    for(unsigned int i = 0; i < points.size(); i++)
+    {
+        distances.push_back(sqrt(points[i].x * points[i].x + points[i].y * points[i].y));
+        sum += distances[i];
+        weights.push_back(sum);
+    }
+
+    double r = random(sum);
+    int i = 0;
+    for(i = 0; i < points.size(); i++)
+    {
+        if(r <= weights[i])
+            break;
+    }
+    return i;
 }
 

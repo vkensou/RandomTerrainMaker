@@ -28,6 +28,7 @@ protected:
     void querylowerpoints(const IntPoint &point0, int radius, int height, std::vector<IntPoint> &points);
     void queryhigherpoints(const IntPoint &point0, int radius, int height, std::vector<IntPoint> &points);
 
+    int getPointRandomly(std::vector<IntPoint> &points);
 };
 
 #endif // PARTICLEDEPOSITION_H

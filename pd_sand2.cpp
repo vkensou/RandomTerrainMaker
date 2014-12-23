@@ -294,7 +294,7 @@ void PD_Sand2::test2()
 
 void PD_Sand2::test3()
 {
-    std::vector<Vector2<int>> &allpoints = getPointsDistanceLessThan(2);
+    std::vector<Vector2<int>> &allpoints = getPointsDistanceIs(1);
     std::vector<double> distances;
     std::vector<double> weights;
     double sum = 0;
@@ -329,7 +329,7 @@ void PD_Sand2::test3()
             int x0 = mterrain.getWidth() / 2, y0 = mterrain.getHeight() / 2;
             for(;;)
             {
-                auto k = randomWithWeight();
+                int k = random(0, allpoints.size() - 1);
                 Vector2<int> &d = allpoints[k];
                 if(s < distances[k])
                     break;
