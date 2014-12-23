@@ -24,7 +24,7 @@ private:
 	//The sand blown by the wind
 	void blowsand();
 	void blowsandstep();
-	void sandblowOutofTerrain(const IntPoint &point);
+    void sandblowOutofTerrain();
     bool canBeBlowed(const UIntPoint &point);
 
 	//Sands flow from high to low
@@ -40,9 +40,13 @@ private:
 
 	void savetobmp(const QString &filename);
 private:
+    void test2();
+    void test3();
+
 	ElementSpace2D<bool> locks;
     Wind mwind;
     Radian angleofWindward;
     Radian angleofLeeward;
+    int sandout;
 };
 

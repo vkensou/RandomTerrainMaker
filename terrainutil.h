@@ -75,4 +75,19 @@ inline std::vector<Vector2<int>> &getPointsDistanceIs(int distance)
 	return list[distance];
 }
 
+inline std::vector<Vector2<int>> &getPointsDistanceLessThan(int distance)
+{
+    static std::map<int, std::vector<Vector2<int>>> list;
+
+    if (list.find(distance) == list.end())
+    {
+        std::vector<Vector2<int>> newlist;
+        LatticePoint::getFromCircle(distance, newlist);
+        list.insert({ distance, newlist });
+    }
+
+    return list[distance];
+}
+
+
 #endif // TERRAINUTIL_H

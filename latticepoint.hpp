@@ -43,7 +43,7 @@ public:
 		assert(radius >= 0);
 
 		points.push_back({ 0, 0 });
-		for (int i = 1; i <= radius; i++)
+        for (int i = 1; i < radius; i++)
 		{
 			pushAxisPoints(i, points);
 		}
@@ -80,8 +80,11 @@ public:
 	static void getFromRing(int bigradius, int smallradius, std::vector<Vector2<int>> &points)
 	{
 		assert(bigradius == smallradius + 1 && smallradius >= 0);
+        bigradius++;
+        smallradius++;
 
-		pushAxisPoints(bigradius, points);
+        if(bigradius > 1)
+            pushAxisPoints(bigradius - 1, points);
 		int x1b = floor(bigradius / sqrt(2));
 		int x1s = floor(smallradius / sqrt(2));
 		int x1 = x1b, y1 = x1;
