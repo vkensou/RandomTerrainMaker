@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector2.h"
+#include "angle.h"
 #include <cmath>
 #include <cassert>
 
@@ -15,13 +16,13 @@ public:
 		normalize();
 	}
 	
-	Direct(double radian)
+    Direct(const Radian &radian)
 	{
 		x = cos(radian);
 		y = sin(radian);
 	}
 
-	double toRadian()
+    Radian toRadian()
 	{
 		normalize();
 		if (x == 0)
