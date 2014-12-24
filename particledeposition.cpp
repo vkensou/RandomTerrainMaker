@@ -11,8 +11,23 @@ void ParticleDeposition::start()
     mstepindex = 0;
     mterrain.fill(0);
 
+//    for (int i = 0; i < 10000; i++)
+//    {
+//        placeOneParticle({mterrain.getWidth() / 2, mterrain.getHeight() / 4 * 1}, 2, 1);
+//    }
+//    for (int i = 0; i < 10000; i++)
+//    {
+//        placeOneParticle({mterrain.getWidth() / 2, mterrain.getHeight() / 4 * 2}, 1, 1);
+//    }
+//    for (int i = 0; i < 10000; i++)
+//    {
+//        placeOneParticle({mterrain.getWidth() / 2, mterrain.getHeight() / 4 * 3}, 1, 2);
+//    }
+    mterrain.setExtension(Terrain::CYCLE);
     for (int i = 0; i < 10000; i++)
-        placeOneParticle({mterrain.getWidth() / 2, mterrain.getHeight() / 2}, 3, 1);
+    {
+        placeOneParticle({0, 0}, 1, 1);
+    }
 }
 
 void ParticleDeposition::step()
@@ -37,23 +52,25 @@ void ParticleDeposition::placeOneParticle(const UIntPoint &position, int radius,
 {
     IntPoint point0(position.x ,position.y);
 
-    while(true)
+    std::vector<IntPoint> lastpoints;
+    lastpoints.push_back(point0);
+
+    std::vector<IntPoint> nextpoints;
+    int r = 1;
+    int h = mterrain.at(point0);
+    for(;;)
     {
-        std::vector<IntPoint> points;
-
-        querylowerpoints(point0, radius, height, points);
-
-        if(points.size() == 0)
-        {
+        nextpoints.clear();
+        h -= height;
+        querylowerpoints(point0, r, radius, h, nextpoints);
+        if(nextpoints.size() == 0)
             break;
-        }
-
-        int k = getPointRandomly(points);
-
-        point0 = points[k];
+        r += radius;
+        lastpoints.swap(nextpoints);
     }
 
-    mterrain.at(point0) += 1;
+    int k = random(0, lastpoints.size() - 1);
+    mterrain.at(lastpoints[k])++;
 }
 
 void ParticleDeposition::placeOneParticle(const UIntPoint &position, const Radian &radian)
@@ -78,52 +95,43 @@ void ParticleDeposition::placeOneParticle(const UIntPoint &position, const Radia
     placeOneParticle(position, radius, height);
 }
 
-void ParticleDeposition::queryNearbyPointsIf(const IntPoint &point0, int radius, std::vector<IntPoint> &points,
+void ParticleDeposition::queryNearbyPointsIf(const IntPoint &point0, int radius, int width, std::vector<IntPoint> &points,
                                              std::function<void(const IntPoint &point, std::vector<IntPoint> &points)> func)
 {
 	assert(radius > 0);
-
-	for (int i = 1; i <= radius; i++)
-	{
-		std::vector<Vector2<int>> &allpoints = getPointsDistanceIs(i);
-		for (int j = 0; j < allpoints.size(); j++)
-		{
-			IntPoint point;
-			if (mterrain.getExtension() != Terrain::NONE)
-			{
-				point = mterrain.extend({ point0.x + allpoints[j].x, point0.y + allpoints[j].y });
-			}
-			else
-			{
-				point = { point0.x + allpoints[j].x, point0.y + allpoints[j].y };
-			}
-			func(point, points);
-		}
-		if (points.size() > 0)return;
-	}
+    for(int i = 0; i < width; i++)
+    {
+        std::vector<Vector2<int>> &allpoints = getPointsDistanceIs(radius + i);
+        for (int j = 0; j < allpoints.size(); j++)
+        {
+            IntPoint point = { point0.x + allpoints[j].x, point0.y + allpoints[j].y };
+            if (mterrain.getExtension() != Terrain::NONE)
+            {
+                point = mterrain.extend(point);
+            }
+            func(point, points);
+        }
+        if(points.size() > 0)return;
+    }
 }
 
-void ParticleDeposition::querylowerpoints(const IntPoint &point0, int radius, int height, std::vector<IntPoint> &points)
+void ParticleDeposition::querylowerpoints(const IntPoint &point0, int radius, int width, int height, std::vector<IntPoint> &points)
 {
-    double h0 = mterrain.at(point0);
-    auto func = [h0, height, this](const IntPoint &point, std::vector<IntPoint> &points)
+    auto func = [&](const IntPoint &point, std::vector<IntPoint> &points)
     {
-        if(mterrain.pointInSpace(point))
+        if(mterrain.pointInSpace(point) && mterrain.at(point) <= height)
         {
-            if(h0 - mterrain.at(point) >= height)
-            {
-                points.push_back(point);
-            }
+            points.push_back(point);
         }
     };
 
-    queryNearbyPointsIf(point0, radius, points, func);
+    queryNearbyPointsIf(point0, radius, width, points, func);
 }
 
-void ParticleDeposition::queryhigherpoints(const IntPoint &point0, int radius, int height, std::vector<IntPoint> &points)
+void ParticleDeposition::queryhigherpoints(const IntPoint &point0, int radius, int width, int height, std::vector<IntPoint> &points)
 {
     double h0 = mterrain.at(point0);
-    auto func = [h0, height, this](const IntPoint &point, std::vector<IntPoint> &points)
+    auto func = [&](const IntPoint &point, std::vector<IntPoint> &points)
     {
         if(mterrain.pointInSpace(point))
         {
@@ -134,7 +142,7 @@ void ParticleDeposition::queryhigherpoints(const IntPoint &point0, int radius, i
         }
     };
 
-    queryNearbyPointsIf(point0, radius, points, func);
+    queryNearbyPointsIf(point0, radius, width, points, func);
 }
 
 int ParticleDeposition::getPointRandomly(std::vector<IntPoint> &points)

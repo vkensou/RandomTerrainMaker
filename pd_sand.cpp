@@ -127,7 +127,7 @@ bool PD_Sand::sandflowstep()
         {
             std::vector<IntPoint> points;
 
-            queryhigherpoints(IntPoint(x, y), 2, 1, points);
+            queryhigherpoints(IntPoint(x, y), 1, 2, 1, points);
 
 			auto iter = points.begin();
 			for (; iter != points.end();)

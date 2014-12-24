@@ -117,6 +117,7 @@ void PD_Sand2::blowsandstep()
 
 void PD_Sand2::sandflow()
 {
+    unlockall();
 	while (sandflowstep());
 }
 
@@ -129,7 +130,7 @@ bool PD_Sand2::sandflowstep()
 		{
 			std::vector<IntPoint> points;
 
-            queryUnlockedHigherPoints(IntPoint(x, y), Radian(Degree(35)), points);
+            queryUnlockedHigherPoints(IntPoint(x, y), 2, points);
 
 			if (points.size() == 0)
 			{
@@ -188,7 +189,7 @@ void PD_Sand2::queryUnlockedHigherPoints(const IntPoint &point0, int radius, std
         }
     };
 
-    queryNearbyPointsIf(point0, radius, points, func);
+    queryNearbyPointsIf(point0, 1, radius, points, func);
 }
 
 void PD_Sand2::queryUnlockedHigherPoints(const IntPoint &point0, const Radian &radian, std::vector<IntPoint> &points)
@@ -230,7 +231,7 @@ void PD_Sand2::sanddepositstep()
 
 void PD_Sand2::test()
 {
-    test3();
+    test4();
     return;
     int testid = 27;
 	QString fmt("s%1_s%2.bmp");
@@ -300,10 +301,8 @@ void PD_Sand2::test3()
     double sum = 0;
     for(unsigned int i = 0; i < allpoints.size(); i++)
     {
-//        int x = allpoints[i].x, y = allpoints[i].y;
-//        distance = sqrt(x )
         distances.push_back(sqrt(allpoints[i].x * allpoints[i].x + allpoints[i].y * allpoints[i].y));
-        sum += distances[i];
+        sum += 2 - distances[i];
         weights.push_back(sum);
     }
     auto randomWithWeight = [&]()
@@ -323,23 +322,48 @@ void PD_Sand2::test3()
     for(int o = 1; o <= 10; o++)
     {
         mterrain.fill(0);
-        for(int i = 0; i < 1000000; i++)
+        for(int i = 0; i < 10000; i++)
         {
             double s = o;
             int x0 = mterrain.getWidth() / 2, y0 = mterrain.getHeight() / 2;
             for(;;)
             {
-                int k = random(0, allpoints.size() - 1);
+//                int k = random(0, allpoints.size() - 1);
+                int k = randomWithWeight();
                 Vector2<int> &d = allpoints[k];
-                if(s < distances[k])
+                if(s < 0)
                     break;
                 x0 += d.x;
                 y0 += d.y;
-                s -= distances[k];
+                s--;
                 mterrain.at(x0, y0) = 1;
             }
         }
         filename = fmt.arg(o);
+        savetobmp(filename);
+    }
+}
+
+void PD_Sand2::test4()
+{
+    mterrain.fill(0);
+
+    locks.reset(mterrain.getWidth(), mterrain.getHeight());
+    locks.fill(false);
+    QString fmt1("s_%1.bmp");
+    QString fmt2("t_%1.bmp");
+    QString filename;
+
+    for(int n = 1; n <= 5; n++)
+    {
+        for (int i = 0; i < pow(10, n); i++)
+        {
+            placeOneParticle({mterrain.getWidth() / 2, mterrain.getHeight() / 2}, 2, 1);
+        }
+        filename = fmt1.arg(n);
+        savetobmp(filename);
+        sandflow();
+        filename = fmt2.arg(n);
         savetobmp(filename);
     }
 }

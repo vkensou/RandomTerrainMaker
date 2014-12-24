@@ -42,6 +42,7 @@ private:
 private:
     void test2();
     void test3();
+    void test4();
 
 	ElementSpace2D<bool> locks;
     Wind mwind;

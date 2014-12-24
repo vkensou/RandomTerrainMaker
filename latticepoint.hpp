@@ -80,11 +80,8 @@ public:
 	static void getFromRing(int bigradius, int smallradius, std::vector<Vector2<int>> &points)
 	{
 		assert(bigradius == smallradius + 1 && smallradius >= 0);
-        bigradius++;
-        smallradius++;
 
-        if(bigradius > 1)
-            pushAxisPoints(bigradius - 1, points);
+        pushAxisPoints(bigradius, points);
 		int x1b = floor(bigradius / sqrt(2));
 		int x1s = floor(smallradius / sqrt(2));
 		int x1 = x1b, y1 = x1;

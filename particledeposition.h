@@ -23,10 +23,10 @@ protected:
     void placeOneParticle(const UIntPoint &position, int radius, int height);
     void placeOneParticle(const UIntPoint &position, const Radian &radian);
 
-	void queryNearbyPointsIf(const IntPoint &point0, int radius, std::vector<IntPoint> &points,
+    void queryNearbyPointsIf(const IntPoint &point0, int radius, int width, std::vector<IntPoint> &points,
 		std::function<void(const IntPoint &point, std::vector<IntPoint> &points)> func);
-    void querylowerpoints(const IntPoint &point0, int radius, int height, std::vector<IntPoint> &points);
-    void queryhigherpoints(const IntPoint &point0, int radius, int height, std::vector<IntPoint> &points);
+    void querylowerpoints(const IntPoint &point0, int radius, int width, int height, std::vector<IntPoint> &points);
+    void queryhigherpoints(const IntPoint &point0, int radius, int width, int height, std::vector<IntPoint> &points);
 
     int getPointRandomly(std::vector<IntPoint> &points);
 };
